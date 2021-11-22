@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ConsoleTables;
 using Stonks.BL.Calculators;
 using Stonks.BL.Queries.Stock;
+using Stonks.BL.Queries.Youtube;
 
 namespace stonks.cmd
 {
@@ -35,6 +36,12 @@ namespace stonks.cmd
 
             var query = new StockFantasyTeamPerformance();
             var result = await query.Get("CI", new DateTime(2021, 08, 10));
+        }
+
+        static async Task Test3()
+        {
+            var query = new YoutubeHistoryQuery();
+            var results = await query.Get("UCnOJQq22gDaX5pjGCHKRf8Q");
         }
     }
 }
