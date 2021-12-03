@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import {BaseApiClient} from "../api/BaseApiClient";
 
-export class FetchData extends Component {
+export class FetchData extends Component<any, {loading: boolean, forecasts: any}> {
   static displayName = FetchData.name;
+  private api: BaseApiClient;
 
-  constructor(props) {
+  constructor(props : any) {
     super(props);
     this.state = { forecasts: [], loading: true };
+    this.api = new BaseApiClient();
   }
 
   componentDidMount() {
     this.populateWeatherData();
   }
 
-  static renderForecastsTable(forecasts) {
+  static renderForecastsTable(forecasts : any[]) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
@@ -52,8 +55,7 @@ export class FetchData extends Component {
   }
 
   async populateWeatherData() {
-    const response = await fetch('weatherforecast');
-    const data = await response.json();
+    const data = await this.api.get('weatherforecast');
     this.setState({ forecasts: data, loading: false });
   }
 }
