@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ConsoleTables;
 using Stonks.BL.Calculators;
+using Stonks.BL.Commands.InitialLoad;
 using Stonks.BL.Queries.Stock;
 using Stonks.BL.Queries.Youtube;
 using Stonks.Db;
@@ -46,6 +49,44 @@ namespace stonks.cmd
 
             var query = new YoutubeHistoryQuery(context);
             var results = await query.Get("UCnOJQq22gDaX5pjGCHKRf8Q");
+        }
+
+        static async Task Test4()
+        {
+            var fantasyContext = new DesignTimeDbContextFactoryFantasyDbContext().CreateDbContext(new []{""});
+            var stocksContext = new DesignTimeDbContextFactoryStocksDbContext().CreateDbContext(new []{""});
+
+            var cmd = new InvestReviewYoutubeChannelSourceLoaderCommand(stocksContext, fantasyContext);
+            var channels = new List<InvestReviewYoutubeChannelSourceLoaderCommand.InModel>
+            {
+                new InvestReviewYoutubeChannelSourceLoaderCommand.InModel()
+                {
+                    // Simple Capitalism
+                    ChannelId = "UCnOJQq22gDaX5pjGCHKRf8Q",
+                    Url = "https://www.youtube.com/channel/UCnOJQq22gDaX5pjGCHKRf8Q",
+                },
+                new InvestReviewYoutubeChannelSourceLoaderCommand.InModel()
+                {
+                    // Nazar
+                    ChannelId = "UCbhXz_OPX3B0eTimt24PGVQ",
+                    Url = "https://www.youtube.com/channel/UCbhXz_OPX3B0eTimt24PGVQ",
+                },
+                new InvestReviewYoutubeChannelSourceLoaderCommand.InModel()
+                {
+                    // Vanin
+                    ChannelId = "UCRcGq7mDsvVRjaxC4f6Zjxw",
+                    Url = "https://www.youtube.com/channel/UCRcGq7mDsvVRjaxC4f6Zjxw",
+                },
+            };
+
+            foreach (var inModel in channels)
+            {
+                var result = await cmd.Exe(inModel, CancellationToken.None);
+                if (!result.IsSuccess)
+                {
+                    throw new Exception(result.Message);
+                }
+            }
         }
     }
 }
