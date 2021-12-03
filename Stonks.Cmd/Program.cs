@@ -34,7 +34,7 @@ namespace stonks.cmd
             // https://www.youtube.com/watch?v=kFqemi7dq60
             // Cigna Corp - Aug 10, 2021 - CI
 
-            var query = new StockFantasyTeamPerformance();
+            var query = new StockFantasyTeamPerformanceQuery();
             var result = await query.Get("CI", new DateTime(2021, 08, 10));
         }
 

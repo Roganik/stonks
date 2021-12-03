@@ -9,41 +9,24 @@ namespace Stonks.BL.Queries.Youtube
 {
     public class YoutubeHistoryQuery
     {
-        public class ResultModel
+        public async Task<List<YoutubeVideoDataQuery.ResultModel>> Get(string channelId)
         {
-            public string Id { get; set; }
-            public string Title { get; set; }
-            public string Author { get; set; }
-            public DateTimeOffset UploadDate { get; set; }
-            public string Description { get; set; }
-            public TimeSpan? Duration { get; set; }
-            public IReadOnlyList<Thumbnail> Thumbnails { get; set; }
-            public IReadOnlyList<string> Keywords { get; set; }
-        }
+            if (string.IsNullOrEmpty(channelId) || channelId.Contains("https") || channelId.Contains("youtube.com"))
+            {
+                throw new NotImplementedException(
+                    $"The parameter value ({channelId}) you provided  is not supported. " +
+                    $"Please pass channelId without any url part");
+            }
 
-        public async Task<List<ResultModel>> Get(string channelId)
-        {
             var youtube = new YoutubeClient();
             var videos = await youtube.Channels.GetUploadsAsync(channelId);
-            var result = new List<ResultModel>(videos.Count);
+            var result = new List<YoutubeVideoDataQuery.ResultModel>(videos.Count);
 
-
+            var videoQuery = new YoutubeVideoDataQuery();
             foreach (var video in videos)
             {
-                // todo: slow. Need to cache metadata after initial load
-                var metadata = await youtube.Videos.GetAsync(video.Id);
-
-                result.Add(new ResultModel
-                {
-                    Id = video.Id,
-                    Title = video.Title,
-                    Author = video.Author.Title,
-                    UploadDate = metadata.UploadDate,
-                    Description = metadata.Description,
-                    Duration = metadata.Duration,
-                    Thumbnails = metadata.Thumbnails,
-                    Keywords = metadata.Keywords,
-                });
+                var metadata = await videoQuery.Get(video);
+                result.Add(metadata);
             }
 
             return result.OrderBy(r => r.UploadDate).ToList();
