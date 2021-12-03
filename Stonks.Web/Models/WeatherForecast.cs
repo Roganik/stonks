@@ -1,6 +1,6 @@
 using System;
 
-namespace Stonks.Web
+namespace Stonks.Web.Models
 {
     public class WeatherForecast
     {
