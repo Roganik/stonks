@@ -6,7 +6,7 @@ using Yahoo.Finance;
 
 namespace Stonks.BL.Queries.Stock
 {
-    public class StockFantasyTeamPerformance
+    public class StockFantasyTeamPerformanceQuery
     {
         public class ResultModel
         {

@@ -10,4 +10,12 @@
       <PackageReference Include="YoutubeExplode" Version="6.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Commands\Stock" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Stonks.Db\Stonks.Db.csproj" />
+    </ItemGroup>
+
 </Project>

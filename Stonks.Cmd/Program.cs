@@ -4,6 +4,7 @@ using ConsoleTables;
 using Stonks.BL.Calculators;
 using Stonks.BL.Queries.Stock;
 using Stonks.BL.Queries.Youtube;
+using Stonks.Db;
 
 namespace stonks.cmd
 {
@@ -40,7 +41,10 @@ namespace stonks.cmd
 
         static async Task Test3()
         {
-            var query = new YoutubeHistoryQuery();
+            var fantasy = new DesignTimeDbContextFactoryFantasyDbContext();
+            var context = fantasy.CreateDbContext(new []{""});
+
+            var query = new YoutubeHistoryQuery(context);
             var results = await query.Get("UCnOJQq22gDaX5pjGCHKRf8Q");
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Stonks.Db;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 
@@ -9,6 +10,12 @@ namespace Stonks.BL.Queries.Youtube
 {
     public class YoutubeHistoryQuery
     {
+        private readonly FantasyDbContext _fantasy;
+
+        public YoutubeHistoryQuery(FantasyDbContext fantasy)
+        {
+            _fantasy = fantasy;
+        }
         public async Task<List<YoutubeVideoDataQuery.ResultModel>> Get(string channelId)
         {
             if (string.IsNullOrEmpty(channelId) || channelId.Contains("https") || channelId.Contains("youtube.com"))
@@ -22,7 +29,7 @@ namespace Stonks.BL.Queries.Youtube
             var videos = await youtube.Channels.GetUploadsAsync(channelId);
             var result = new List<YoutubeVideoDataQuery.ResultModel>(videos.Count);
 
-            var videoQuery = new YoutubeVideoDataQuery();
+            var videoQuery = new YoutubeVideoDataQuery(_fantasy);
             foreach (var video in videos)
             {
                 var metadata = await videoQuery.Get(video);
