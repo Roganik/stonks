@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import {BaseApiClient} from "../api/BaseApiClient";
+import {WeatherForecastApi, WeatherForecast, createConfiguration, Configuration} from "../api/index";
 
-export class FetchData extends Component<any, {loading: boolean, forecasts: any}> {
+export class FetchData extends Component<any, {loading: boolean, forecasts: WeatherForecast[]}> {
   static displayName = FetchData.name;
-  private api: BaseApiClient;
+  private api: WeatherForecastApi;
 
   constructor(props : any) {
     super(props);
     this.state = { forecasts: [], loading: true };
-    this.api = new BaseApiClient();
+    const config : Configuration = createConfiguration();
+    this.api = new WeatherForecastApi(config);
   }
 
   componentDidMount() {
@@ -55,7 +56,7 @@ export class FetchData extends Component<any, {loading: boolean, forecasts: any}
   }
 
   async populateWeatherData() {
-    const data = await this.api.get('weatherforecast');
+    const data = await this.api.weatherForecastGet();
     this.setState({ forecasts: data, loading: false });
   }
 }
